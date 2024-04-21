@@ -1,0 +1,7 @@
+<p>portal works!</p>
+
+<input type="file" #fileInputControl (change)="onFileInputChanged()" multiple>
+
+<input type="button" value="Upload" (click)="onUploadButtonClick()"> 
+
+<mat-progress-bar *ngIf=progressVisible [mode]="'determinate'" [value]="progress_now" [bufferValue]="progress_max"></mat-progress-bar>

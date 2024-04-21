@@ -28,9 +28,12 @@ class Settings:
     # ログクラス名 - log_configの名前とそろえること
     LOG_CLASS_NAME="API"
 
-
-
     pass
 
 
-settings = Settings()
+class SettingsEx(Settings):
+    
+    def create_save_filepath(self, filename) -> str:
+        return self.SAVE_ROOT_PATH + filename;
+    
+settings = SettingsEx()

@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
-import {WebConnectService} from "../util/web-connect.service"
+import { Injectable, numberAttribute } from '@angular/core';
+import {ProgressInfo, WebConnectService} from "../util/web-connect.service"
 import { UserInfo } from './reflect-type';
+import { Observable } from 'rxjs';
+import { HttpBackend, HttpEvent, HttpEventType } from '@angular/common/http';
 
 
 
@@ -13,7 +15,11 @@ export class ReflectWebService {
     
   }
 
+  /**
+   * 保存認証token名
+   */
   private static AUTH_SESSION_KEY = "ref_auth_key";
+
 
   /**
    * ログイン処理
@@ -35,9 +41,18 @@ export class ReflectWebService {
     ans.UserID = user["ms_user_id"];
     ans.UserName = user["user_name"];
     console.log("ans", ans);
+
     return ans;
   }
 
+  /*
+  public refUpload(data:FormData): Observable<HttpEvent<any>> {    
+    return this.webSvc.postWebWithProgressTEST<number>("api/refupload", {}, data);    
+  }*/
+  public refUpload(data:FormData): Observable<ProgressInfo<number>> {    
+    return this.webSvc.postWebWithProgress<number>("api/refupload", {}, data);    
+  }
+ 
   //--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//
   /**
    * 認証付きget要求

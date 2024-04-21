@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {FormsModule} from "@angular/forms";
+import {Router} from "@angular/router"
 import {CommonModule} from "@angular/common";
 import {ReflectWebService} from "../../lib/reflect-web.service";
 import {ReflectCommonService} from "../../lib/reflect-common.service";
@@ -22,7 +23,8 @@ export class LoginComponent {
   constructor(
     private webSvc: ReflectWebService,
     public config:AppConfigService,
-    private refSvc:ReflectCommonService
+    private refSvc:ReflectCommonService,
+    private router:Router
   ) {
 
   }
@@ -72,11 +74,11 @@ export class LoginComponent {
       }
 
       //画面遷移
+      this.router.navigate(["portal"]);
 
     }
     catch(ex)
-    {     
-      
+    {
       console.error(ex);
       this.errorMessage = "失敗";
     }

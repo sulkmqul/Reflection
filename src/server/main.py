@@ -39,6 +39,7 @@ app.add_middleware(
     allow_origins=refconfig.settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods="GET,POST,PUT",
+    allow_headers=["reflect-token"]
 )
 
 @app.get("/test")
