@@ -94,7 +94,28 @@ def update_user(user:ms_user.MsUser, uid=Depends(auth.require_admin_auth)):
         log.error(ex)
         raise HTTPException(500)
     pass 
+#-----------------------------------------------------------------------------------------
+@rt.post("/delete_user")
+def delete_user(user:ms_user.MsUser, uid=Depends(auth.require_admin_auth)):
+    """
+    ユーザーの削除
+    """
+    try:
+        with dbmana.DbManager() as mana:
+            try:
+                mana.begin_transaction()
+                ms_user.delete_user(mana, user, uid)
+                mana.commit()
+            except Exception as uex:
+                mana.rollback()
+                raise uex
 
+        return util.create_reflect_response(0)
+        pass
+    except Exception as ex:
+        log.error(ex)
+        raise HTTPException(500)
+    pass 
 #-----------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
 #ms_list_info_col関係
