@@ -1,11 +1,18 @@
-from fastapi import Header, Request, HTTPException
 import decimal
 import json
 import base64
-import datetime
-import refconfig
-import jwt
 import dataclasses
+import fastapi.responses
+
+#------------------------------------------------------------------------------------
+def create_reflect_response(code = 0, message = "") -> fastapi.responses.HTMLResponse:
+    """
+    デフォルトレスポンスの作成
+    """
+    data = {"code":code, "message":message}
+    return fastapi.responses.HTMLResponse(content=to_json(data));
+
+
 #------------------------------------------------------------------------------------
 def to_json(data):
     """
@@ -37,44 +44,3 @@ def _json_custom_converter(data):
 
 
 
-#---------------------------------------------------------------------------
-def create_authtoken(user_id) -> str:
-    """
-    認証tokenの作成
-    user_id:ユーザーID
-    return:作成token
-    """
-    exp = datetime.datetime.now() + datetime.timedelta(hours=refconfig.settings.AUTH_VALID_HOUR)
-    atoken = jwt.encode({"user_id":user_id, "exp":exp}, refconfig.settings.AUTH_SECRET_KEY, algorithm=refconfig.settings.AUTH_ALGORITHM)    
-    return atoken
-
-#---------------------------------------------------------------------------
-def decode_authtoken(token:str) -> int:
-    """
-    認証tokenの解読
-    token:解析token文字列
-    return:ユーザーID
-    """
-    dec = jwt.decode(token, refconfig.settings.AUTH_SECRET_KEY, algorithms=refconfig.settings.AUTH_ALGORITHM)
-
-    return dec["user_id"]
-
-#---------------------------------------------------------------------------
-def require_login_auth(req:Request) -> int:
-    """
-    認証要求
-    req:httpリクエスト
-    return:認証ユーザーID
-    """
-    
-    # debugの時は指定ユーザーIDを返却する
-    if refconfig.settings.AUTH_DEBUG is True:
-        return 1
-
-    try:
-        token = req.headers["reflect-token"]
-        n = decode_authtoken(token)
-    except:
-        raise HTTPException(401, "Unauthorizaed")
-    
-    return n

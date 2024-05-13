@@ -1,7 +1,9 @@
-from db import dbmana, ms_user, rf_list
+from db import dbmana, ms_user, rf_list, rf_list_info, ms_list_info_columns
 from modules import mlog
 
 log = mlog.get_log()
+
+
 
 #----------------------------------------------------------------------------
 def init_db():
@@ -21,7 +23,10 @@ def init_db():
 
             #初期テーブルとデータの作成
             ms_user.create_template(cur)
+            ms_list_info_columns.create_template(cur)
             rf_list.create_template(cur)
+            rf_list_info.create_template(cur)
+
 
             mana.commit()
         except:

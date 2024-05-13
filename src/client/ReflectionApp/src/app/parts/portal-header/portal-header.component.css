@@ -1,0 +1,38 @@
+div {
+    background-color:thistle;    
+}
+
+.portal_info{
+    font-size: 1rem;    
+    padding: 5px 0px 0px 20px;
+}
+
+input {
+    margin: 0.5rem;
+    background-color: cornflowerblue;
+    color: #FFF;
+    padding: 10px 20px 10px 20px;
+}
+    
+input:hover {
+    margin: 0.5rem;
+    background-color: blue;
+    
+}
+input:active {
+    margin: 0.5rem;
+    color: #AAA;
+    background-color: darkblue;
+    
+}
+
+
+
+.smalllogo{     
+    font-size: 3em;
+    margin: 10px;
+}
+
+.error_div {
+    background-color:white;
+}

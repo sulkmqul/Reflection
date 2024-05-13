@@ -16,14 +16,15 @@ class Settings:
     ####################################################################################
     # 認証
     # Trueで認証を回避する
-    AUTH_DEBUG = False
+    AUTH_DEBUG = True
     # 認証tokenの有効時間
     AUTH_VALID_HOUR = 1
     # jwtの使用アルゴリズム
     AUTH_ALGORITHM="HS256"
     # 秘密鍵
     AUTH_SECRET_KEY="reflection_4n35uqio5mdth6uai"
-
+    # ヘッダー名
+    AUTH_TOKEN_HEADER_NAME = "reflect-token"
     ####################################################################################
     # ログクラス名 - log_configの名前とそろえること
     LOG_CLASS_NAME="API"

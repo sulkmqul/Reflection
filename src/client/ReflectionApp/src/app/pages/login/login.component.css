@@ -2,7 +2,7 @@
     width: 100%;
     height: 95dvh;
 
-    background-image: url('../../../assets/back.png');
+    background-image: url('../../../assets/title.png');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -11,13 +11,7 @@
     align-items: center;    
     justify-content: center;
 }
-.title{
-    font-size: 6rem;
-    -webkit-text-stroke: 0.1rem #000;
-    color: #FAFAFA;        
-    text-align: center;
-    margin: 0;
-}
+
 mat-card {
     width: 500px;
     max-width: 95%;

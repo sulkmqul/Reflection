@@ -1,0 +1,26 @@
+<div>
+    <input type="button" class="combutton button_control" value="追加" (click)="clickAddInfoButton()">
+    <input type="button" class="combutton button_control" value="削除" (click)="clickRemoveInfoButton()">
+</div>
+<div>
+    <table mat-table [dataSource]="columnsInfoData" class="colinfo_table">
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>name</th>
+            <td mat-cell *matCellDef="let element">{{element.column_name}}</td>
+        </ng-container>
+        <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>type</th>
+            <td mat-cell *matCellDef="let element">{{element.column_type}}</td>
+        </ng-container>
+        <ng-container matColumnDef="sort_order">
+            <th mat-header-cell *matHeaderCellDef>sort</th>
+            <td mat-cell *matCellDef="let element">{{element.sort_order}}</td>
+        </ng-container>   
+        <ng-container matColumnDef="visibled">
+            <th mat-header-cell *matHeaderCellDef>visibled</th>
+            <td mat-cell *matCellDef="let element">{{element.visible_flag}}</td>
+        </ng-container>       
+        <tr mat-header-row *matHeaderRowDef="displayData"></tr>
+        <tr (click)="clickTableRow(row)" (dblclick)="doubleClickTable(row)" [class.selected_row]="selectedDataVec.has(row)"  mat-row *matRowDef="let row; columns: displayData;"></tr>
+    </table>
+</div>

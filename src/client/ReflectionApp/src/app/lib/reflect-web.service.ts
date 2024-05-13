@@ -1,7 +1,7 @@
 import { Injectable, numberAttribute } from '@angular/core';
 import {ProgressInfo, WebConnectService} from "../util/web-connect.service"
-import { UserInfo } from './reflect-type';
-import { Observable } from 'rxjs';
+import { UserInfo, MsListInfoColumns, ReflectResponse } from './reflect-type';
+import { Observable, firstValueFrom } from 'rxjs';
 import { HttpBackend, HttpEvent, HttpEventType } from '@angular/common/http';
 
 
@@ -45,12 +45,39 @@ export class ReflectWebService {
     return ans;
   }
 
-  /*
-  public refUpload(data:FormData): Observable<HttpEvent<any>> {    
-    return this.webSvc.postWebWithProgressTEST<number>("api/refupload", {}, data);    
-  }*/
+  /**
+   * 情報カラムの取得
+   */
+  public async get_info_col_list() : Promise<MsListInfoColumns[]> {    
+    return this.getWebAuth<MsListInfoColumns[]>("admin/get_info_col_list", {}, {});
+  }
+
+  /**
+   * 情報カラムの追加、更新
+   * @param infolist 編集情報
+   * @returns 成功可否
+   */
+  public async commit_info_col(infolist: MsListInfoColumns[]): Promise<boolean> {
+    const resp = await this.postWebAuth<ReflectResponse>("admin/commit_info_col", {}, infolist);
+    return (resp.code == ReflectResponse.CODE_OK);
+  }
+
+  /**
+   * 管理情報の削除
+   * @param infolist 
+   * @returns 
+   */
+  public async delete_info_col(infolist: MsListInfoColumns[]): Promise<boolean> {
+    const resp = await this.postWebAuth<ReflectResponse>("admin/delete_info_col", {}, infolist);
+    return (resp.code == ReflectResponse.CODE_OK);
+  }
+
+  
   public refUpload(data:FormData): Observable<ProgressInfo<number>> {    
     return this.webSvc.postWebWithProgress<number>("api/refupload", {}, data);    
+  }
+  public refUploadmuti(data:FormData): Observable<ProgressInfo<number>> {    
+    return this.webSvc.postWebWithProgress<number>("api/refuploadmulti", {"Content-Type":"application/octet-stream"}, data);    
   }
  
   //--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//

@@ -92,7 +92,7 @@ export class WebConnectService {
     }
     
     const obs = this.http.get<T>(url+ '?' + htpa.toString(), {withCredentials:true, headers:header});    
-    return firstValueFrom(obs)
+    return firstValueFrom<T>(obs)
   }
 
 
@@ -143,7 +143,7 @@ export class WebConnectService {
 
     //httpeventを扱いやすくする。
     return req.pipe(
-      filter(x => x.type == HttpEventType.Response || x.type == HttpEventType.UploadProgress),
+      //filter(x => x.type == HttpEventType.Response || x.type == HttpEventType.UploadProgress),
       map(x => {        
         const a = this.procPostProgressNext<T>(x);
         return a;
@@ -191,7 +191,9 @@ export class WebConnectService {
         break;
 
       default:
-        throw new Error("unknown http event raise:" + ev.type)        
+        //throw new Error("unknown http event raise:" + ev.type);
+        console.log("unknown event", ev.type);
+        ans = new ProgressInfo<T>(0, 0);
         break;
     }
     

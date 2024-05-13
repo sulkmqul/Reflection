@@ -1,60 +1,36 @@
-from fastapi import APIRouter, HTTPException, Request, File, UploadFile, Depends
+from fastapi import APIRouter, HTTPException, Request, File, Form, UploadFile, Depends
 from fastapi.responses import HTMLResponse
-from modules import mlog, util
+from modules import mlog, util, auth
 import refconfig;
+from db import rf_list, rf_list_info
 
 rt = APIRouter(prefix="/api")
 log = mlog.get_log()
 
 
-"""
-@rt.get("/test")
-def test():    
-    return HTMLResponse(content=util.to_json("I am Test"))
+#-----------------------------------------------------------------------------------------
 
 
-@rt.get("/testapi")
-def test_api(uid:int = Depends(util.require_login_auth)):
-    return HTMLResponse(content=util.to_json("I am Auth"))
-"""
 
-async def save(file:UploadFile):
-    import shutil, asyncio
-    fpath = refconfig.settings.create_save_filepath(file.filename)    
-    with open(fpath, "wb") as fp:
-        shutil.copyfileobj(file.file, fp)
-        pass
-    file.close()
-
-    print("savefiles ", fpath)
-    pass
-
-
+#-----------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
 @rt.post("/refupload")
-async def refupload(file:UploadFile):
-    import asyncio
-    #await save(file=file)
-    await asyncio.create_task(save(file))
-    """
-    print("refupload", file.filename, file.size)
+async def refupload(file: list[UploadFile], data:str = Form()):
+
     fpath = refconfig.settings.create_save_filepath(file.filename)
 
-    # 読込
-    fdata = await file.read()    
+    # 
+    for file_data in file:
+        fdata = await file_data.read()
+        
+        # パスの作成        
+        fpath = refconfig.settings.create_save_filepath(file_data.filename)
+        with open(fpath, "wb") as fp:
+            fp.write(fdata)
+            pass
+        print("savefiles ", fpath)
     
-    #以下の処理はブロッキングしちゃうので失敗。非同期保存しないとだめ    
-    # パスの作成        
-    fpath = refconfig.settings.create_save_filepath(file.filename)
-    with open(fpath, "wb") as fp:
-        fp.write(fdata)
-        pass
-    print("savefiles ", fpath)
-    """
-
-
-
-    return HTMLResponse(content=util.to_json(336))
-
+    return HTMLResponse(content=util.to_json(1))
 
 
 
