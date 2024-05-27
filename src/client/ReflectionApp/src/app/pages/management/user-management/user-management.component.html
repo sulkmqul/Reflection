@@ -1,1 +1,22 @@
-<p>user-management works!</p>
+<div>
+    <input type="button" class="combutton button_control" value="追加" (click)="clickAddUserButton()">
+    <input type="button" class="combutton button_control" value="削除" (click)="clickRemoveUserButton()">
+</div>
+<div>
+    <table mat-table [dataSource]="userList" class="colinfo_table">
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>id</th>
+            <td mat-cell *matCellDef="let element">{{element.ms_user_id}}</td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>name</th>
+            <td mat-cell *matCellDef="let element">{{element.user_name}}</td>
+        </ng-container>
+        <ng-container matColumnDef="admin">
+            <th mat-header-cell *matHeaderCellDef>admin</th>
+            <td mat-cell *matCellDef="let element">{{element.admin_flag}}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayData"></tr>
+        <tr (click)="clickTableRow(row)" (dblclick)="doubleClickTableRow(row)" [class.selected_row]="selectedList.has(row)"  mat-row *matRowDef="let row; columns: displayData;"></tr>
+    </table>
+</div>

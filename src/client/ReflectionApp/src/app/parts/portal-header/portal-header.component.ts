@@ -26,14 +26,14 @@ export class PortalHeaderComponent {
    * ログインユーザー名
    */
   public get loginUserName(): string {
-    return this.refSvc.loginUser?.UserName ?? "";
+    return this.refSvc.loginUser?.user_name ?? "";
   }
 
   /**
    * 管理者可否
    */
   public get isManagement(): boolean {
-    return this.refSvc.loginUser?.AdminFlag ?? true;    
+    return (this.refSvc.loginUser?.admin_flag == 1);    
   }
 
   /**

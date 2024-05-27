@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Request, File, Form, UploadFile, D
 from fastapi.responses import HTMLResponse
 from modules import mlog, util, auth
 import refconfig;
-from db import ms_user, rf_list, rf_list_info, ms_list_info_columns, rf_list_info_logic, dbmana
+from db import list_info_columns_logic, ms_user, rf_list, rf_list_info, ms_list_info_columns, dbmana
 
 """
 管理者のみが権限を有するAPI群
@@ -80,7 +80,7 @@ def update_user(user:ms_user.MsUser, uid=Depends(auth.require_admin_auth)):
     """
     try:
         with dbmana.DbManager() as mana:
-            try:
+            try:                
                 mana.begin_transaction()
                 ms_user.update_user(mana, user, uid)            
                 mana.commit()
@@ -96,7 +96,7 @@ def update_user(user:ms_user.MsUser, uid=Depends(auth.require_admin_auth)):
     pass 
 #-----------------------------------------------------------------------------------------
 @rt.post("/delete_user")
-def delete_user(user:ms_user.MsUser, uid=Depends(auth.require_admin_auth)):
+def delete_user(userlist:list[ms_user.MsUser], uid=Depends(auth.require_admin_auth)):
     """
     ユーザーの削除
     """
@@ -104,7 +104,8 @@ def delete_user(user:ms_user.MsUser, uid=Depends(auth.require_admin_auth)):
         with dbmana.DbManager() as mana:
             try:
                 mana.begin_transaction()
-                ms_user.delete_user(mana, user, uid)
+                for user in userlist:
+                    ms_user.delete_user(mana, user, uid)
                 mana.commit()
             except Exception as uex:
                 mana.rollback()
@@ -142,7 +143,7 @@ def commit_info_col(infolist:list[ms_list_info_columns.MsListInfoColumns], uid=D
     管理テーブル情報の追加削除
     """    
     try:
-        rf_list_info_logic.insert_update(infolist, uid)
+        list_info_columns_logic.insert_update(infolist, uid)
         return util.create_reflect_response(0)
         pass
     except Exception as ex:
@@ -156,7 +157,7 @@ def delete_info_col(infolist:list[ms_list_info_columns.MsListInfoColumns], uid=D
     管理テーブル情報の追加削除
     """    
     try:
-        rf_list_info_logic.delete_col_info(infolist, uid)
+        list_info_columns_logic.delete_col_info(infolist, uid)
         return util.create_reflect_response(0)
         pass
     except Exception as ex:

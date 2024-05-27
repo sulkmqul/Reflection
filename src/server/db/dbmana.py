@@ -137,11 +137,3 @@ class DbManager:
         
 
 
-@dataclass
-class BaseReflectionTable:
-    delete_flag: int = 0
-    create_user_id: int = 0
-    create_date: str = ""
-    update_user_id: int = 0
-    update_date: str = ""
-    pass

@@ -1,0 +1,13 @@
+.coldialog{
+    margin: 1rem;
+}
+
+.okbutton{
+    text-align: right;
+    margin: 1rem;
+}
+
+.dialog_title{
+    font-size: 1.5em;
+    font-weight: bold;
+}

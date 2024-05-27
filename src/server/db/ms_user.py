@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 import sqlite3
-from db.dbmana import DbManager, BaseReflectionTable
+from db.dbmana import DbManager
 
 @dataclass
 class MsUser:
@@ -11,10 +11,7 @@ class MsUser:
 
 
 @dataclass
-class MsUserEdit:
-    ms_user_id: int = 0
-    user_name: str = ""
-    admin_flag: int = 0
+class MsUserEdit(MsUser):
     login_id:str = ""
     login_password:str = ""
     pass
@@ -110,6 +107,7 @@ def check_login_id(login_id: str) -> bool:
     """
     対象のログインIDが有効か否かを調べる
     login_id:チェックするログインID
+    return:true=問題なし
     """
     sql = """
 SELECT

@@ -1,0 +1,37 @@
+<div class="fdiag_root">
+    <div class="dialog_title">{{titleString}}</div>
+    <table>
+        <tr>
+            <td>
+                ファイル
+            </td>
+            <td>
+                <input type="file" #fileInputControl (change)="onFileInputChanged()">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                ファイルサイズ
+            </td>
+            <td>
+                {{fileSize}}
+            </td>
+        </tr>
+        <!--追記情報の入力-->
+        <tr *ngFor="let col of colList; let i = index">
+            <td>
+                {{col.display_name}}                
+            </td>
+            <td>
+                <app-col-type-input [colData]="col" (value)="colInputEvent($event, i)"></app-col-type-input>                
+            </td>
+        </tr>
+    </table>    
+    <div class="control_area">
+        <input type="button" *ngIf="progressVisibled" class="combutton control_button control_button_cancel" value="Cancel" (click)="clickButtonCancelUpload()">
+        <input type="button" *ngIf="!progressVisibled" class="combutton control_button" value="OK" (click)="clickButtonOK()">
+        <input type="button" *ngIf="editFlag" class="combutton control_button" value="削除" (click)="clickButtonODelete()">
+    </div>
+    <div class="error_message">{{errorMessage}}</div>
+    <mat-progress-bar *ngIf="progressVisibled" mode="determinate" [value]="progress_now" [bufferValue]="progress_max"></mat-progress-bar>
+</div>

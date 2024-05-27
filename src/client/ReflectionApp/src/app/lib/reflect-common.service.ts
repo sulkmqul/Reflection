@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {UserInfo} from "./reflect-type";
+import {MsUser} from "./reflect-type";
 import { HttpErrorResponse, HttpResponseBase } from '@angular/common/http';
 
 /**
@@ -16,7 +16,7 @@ export class ReflectCommonService {
   /**
    * ログインユーザー
    */
-  public loginUser : UserInfo | null = null;
+  public loginUser : MsUser | null = new MsUser();
 
   /**
    *エラーメッセージ
@@ -28,7 +28,8 @@ export class ReflectCommonService {
    * ログイン処理
    * @param user 
    */
-  public loginProc(user:UserInfo):boolean {    
+  public loginProc(user:MsUser):boolean { 
+    this.loginUser = user;   
     return true;
   }
 

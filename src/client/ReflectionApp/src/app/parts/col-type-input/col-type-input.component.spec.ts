@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FileListComponent } from './file-list.component';
+import { ColTypeInputComponent } from './col-type-input.component';
 
-describe('FileListComponent', () => {
-  let component: FileListComponent;
-  let fixture: ComponentFixture<FileListComponent>;
+describe('ColTypeInputComponent', () => {
+  let component: ColTypeInputComponent;
+  let fixture: ComponentFixture<ColTypeInputComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FileListComponent]
+      imports: [ColTypeInputComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(FileListComponent);
+    fixture = TestBed.createComponent(ColTypeInputComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

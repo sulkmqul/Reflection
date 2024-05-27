@@ -1,6 +1,6 @@
 import { Injectable, numberAttribute } from '@angular/core';
 import {ProgressInfo, WebConnectService} from "../util/web-connect.service"
-import { UserInfo, MsListInfoColumns, ReflectResponse } from './reflect-type';
+import { MsUser, MsListInfoColumns, ReflectResponse, MsUserEdit, ManageListData, RfListView } from './reflect-type';
 import { Observable, firstValueFrom } from 'rxjs';
 import { HttpBackend, HttpEvent, HttpEventType } from '@angular/common/http';
 
@@ -21,13 +21,38 @@ export class ReflectWebService {
   private static AUTH_SESSION_KEY = "ref_auth_key";
 
 
+  //--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//
+  //--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//
+  //API
+  //--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//
+  //--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//
+  /**
+   * 管理ファイル一覧取得
+   * @returns 
+   */
+  public async get_list(): Promise<ManageListData> {
+    return this.getWebAuth<ManageListData>("api/get_list", {}, {});
+    
+  }
+
+
+  public insert_manage_data(fdata:FormData): Observable<ProgressInfo<number>> {
+    return this.postWebProgressAuth<number>("api/insert_manage_data", {}, fdata);
+    
+  }
+
+  //--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//
+  //--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//
+  //Auth
+  //--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//
+  //--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//
   /**
    * ログイン処理
    * @param login_id ログインID
    * @param login_password パスワード
    * @returns ユーザー情報
    */
-  public async login(login_id:string, login_password:string): Promise<UserInfo>{
+  public async login(login_id:string, login_password:string): Promise<MsUser>{
 
     //let m = new Promise(rev => setTimeout(rev, 1000));
     //await m;
@@ -37,13 +62,70 @@ export class ReflectWebService {
     let token = user["auth_token"];
     sessionStorage.setItem(ReflectWebService.AUTH_SESSION_KEY, token);
 
-    let ans = new UserInfo();
-    ans.UserID = user["ms_user_id"];
-    ans.UserName = user["user_name"];
-    console.log("ans", ans);
-
+    
+    const ans = user["user"];
+    
+    
     return ans;
   }
+
+  //--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//
+  //--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//
+  //Admin
+  //--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//
+  //--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//
+  /**
+   * ユーザー一覧の取得
+   * @returns 
+   */
+  public async get_user_list() : Promise<MsUser[]> {
+    return this.getWebAuth("admin/get_user_list", {}, {});
+  }
+
+
+  /**
+   * ログインIDの不正チェック
+   * @param login_id 確認ID
+   * @returns true=問題なし false=問題あり
+   */
+  public async check_login_id(login_id:string) : Promise<boolean> {
+    const ret = await this.getWebAuth<ReflectResponse>("admin/check_login_id", {}, {"login_id": login_id});
+    if(ret.code == 1){
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * ユーザー挿入
+   * @param user 挿入データ
+   * @returns 挿入UserID
+   */
+  public async insert_user(user:MsUserEdit) : Promise<number> {
+    const ret = await this.postWebAuth<ReflectResponse>("admin/insert_user", {}, user);
+    return ret.code;
+  }
+
+  /**
+   * ユーザーの更新
+   * @param user 更新情報
+   * @returns 成功可否
+   */
+  public async update_user(user:MsUser) : Promise<boolean> {
+    const ret = await this.postWebAuth<ReflectResponse>("admin/update_user", {}, user);
+    return (ret.code == ReflectResponse.CODE_OK);
+  }
+
+  /**
+   * ユーザーの削除
+   * @param userlist 削除するユーザー一式
+   * @returns 成功可否
+   */
+  public async delete_user(userlist:MsUser[]): Promise<boolean> {
+    const ret = await this.postWebAuth<ReflectResponse>("admin/delete_user", {}, userlist);
+    return (ret.code == ReflectResponse.CODE_OK);
+  }
+
 
   /**
    * 情報カラムの取得
@@ -73,6 +155,8 @@ export class ReflectWebService {
   }
 
   
+
+
   public refUpload(data:FormData): Observable<ProgressInfo<number>> {    
     return this.webSvc.postWebWithProgress<number>("api/refupload", {}, data);    
   }
@@ -115,5 +199,24 @@ export class ReflectWebService {
     }
     
     return this.webSvc.postWeb<T>(upath, hdic, body);
+  }
+
+  
+  /**
+   * 認証付き進捗報告付Post要求
+   * @param upath 要求uri
+   * @param hdic ヘッダー
+   * @param body post内容
+   * @returns 
+   */
+  private postWebProgressAuth<T>(upath: string, hdic:{[name:string]:string}, body:any): Observable<ProgressInfo<T>> {    
+
+    //認証トークンを要求ヘッダーに追加
+    const token = sessionStorage.getItem(ReflectWebService.AUTH_SESSION_KEY);
+    if(token != null){
+      hdic["reflect-token"] = token;
+    }
+    
+    return this.webSvc.postWebWithProgress<T>(upath, hdic, body);
   }
 }

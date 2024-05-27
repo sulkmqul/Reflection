@@ -6,7 +6,7 @@
     <table mat-table [dataSource]="columnsInfoData" class="colinfo_table">
         <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef>name</th>
-            <td mat-cell *matCellDef="let element">{{element.column_name}}</td>
+            <td mat-cell *matCellDef="let element">{{element.display_name}}</td>
         </ng-container>
         <ng-container matColumnDef="type">
             <th mat-header-cell *matHeaderCellDef>type</th>

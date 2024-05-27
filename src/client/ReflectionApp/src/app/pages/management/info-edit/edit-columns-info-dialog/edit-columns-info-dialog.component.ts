@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {MsListInfoColumns} from "../../../../lib/reflect-type";
+import {MsListInfoColumns, ListInfoColumnsType} from "../../../../lib/reflect-type";
 import {IntegerInputDirective} from "../../../../util/integer-input.directive";
 import { ReflectWebService } from '../../../../lib/reflect-web.service';
 
@@ -32,9 +32,8 @@ export class EditColumnsInfoDialogComponent {
       this.title = "編集";
 
       //編集時は型の変更を許可しない
-      this.typeArray = [info.column_type];
-
-      this.col_name = info.column_name;
+      this.typeArray = [info.column_type];      
+      this.disp_name = info.display_name;
       this.col_type = info.column_type;
       this.default_value = info.default_value;
       this.sort_order = info.sort_order.toString();
@@ -50,7 +49,7 @@ export class EditColumnsInfoDialogComponent {
    */
   public title: string = "";
 
-  public col_name: string = "";
+  public disp_name: string = "";
   public col_type: string = "INTEGER";
   public default_value:string = "";
   public sort_order:string = "";
@@ -70,9 +69,9 @@ export class EditColumnsInfoDialogComponent {
    * 利用できる型定義
    */
   public typeArray = [
-    "INTEGER",
-    "REAL",
-    "TEXT"
+    ListInfoColumnsType.INT,
+    ListInfoColumnsType.REAL,
+    ListInfoColumnsType.TEXT
   ]
 
   /**
@@ -98,8 +97,8 @@ export class EditColumnsInfoDialogComponent {
       ans = this.info;
     }
 
-    ans.column_name = this.col_name.trim();
-    if(ans.column_name.length <= 0){
+    ans.display_name = this.disp_name.trim();
+    if(ans.display_name.length <= 0){
       throw Error("invalid column name");
     }
     ans.column_type = this.col_type;
@@ -111,6 +110,7 @@ export class EditColumnsInfoDialogComponent {
       ans.visible_flag = 1;
     }
 
+    console.log(ans)
     return ans;
   }
 
