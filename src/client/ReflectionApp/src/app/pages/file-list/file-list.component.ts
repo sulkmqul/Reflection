@@ -74,7 +74,16 @@ export class FileListComponent implements OnInit  {
    */
   doubleClickRow(row: RfListView) {
 
-    console.log("dblclick", row)
+    console.log("dblclick", row);
+
+    const diag = this.dialog.open(FileEditDialogComponent, {data:row});
+    
+    //閉じたとき
+    diag.afterClosed().subscribe(async ret => {
+      if(ret == true){
+        await this.loadList()
+      }
+    });
   }
 
 

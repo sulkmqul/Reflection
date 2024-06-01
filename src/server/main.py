@@ -39,12 +39,21 @@ app.include_router(api.reflection_auth.rt)
 app.include_router(api.reflection_admin.rt)
 
 # CORS設定
+"""
 app.add_middleware(
     CORSMiddleware,
     allow_origins=refconfig.settings.CORS_ORIGINS,
     allow_credentials=True,
-    allow_methods="GET,POST,PUT",
-    allow_headers=["reflect-token"]
+    allow_methods="GET,POST,PUT",    
+    allow_headers=["reflect-token"]    
+)
+"""
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[refconfig.settings.CORS_ORIGINS],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 @app.get("/test")

@@ -23,11 +23,10 @@ def insert_record(mana:DbManager, rf_list_id:int, data:dict, colist:list[MsListI
     sql = _create_insert_sql(colist=colist)    
     val = [data.get(co.display_name) for co in colist]
     print(sql, (rf_list_id, *val))
-    mana.insert(sql, (rf_list_id, *val))
-    
-    pass
+    id = mana.insert(sql, (rf_list_id, *val))    
+    return id
 #------------------------------------------------------------------------------------
-def update_record(mana:DbManager, rf_list_id:int, data:dict, colist:list[MsListInfoColumnsEdit], userid:int) -> int:
+def update_record(mana:DbManager, rf_list_id:int, data:dict, colist:list[MsListInfoColumnsEdit], userid:int):
     """
     更新
     mana:DB管理
@@ -38,7 +37,9 @@ def update_record(mana:DbManager, rf_list_id:int, data:dict, colist:list[MsListI
 
     sql = _create_update_sql(colist=colist)
 
-    mana.insert(sql, (*data, rf_list_id))
+    val = [data.get(co.display_name) for co in colist]
+
+    mana.execute(sql, (*val, rf_list_id))
     
     pass
 

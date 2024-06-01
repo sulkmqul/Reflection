@@ -68,14 +68,14 @@ export class WebConnectService {
     private config:AppConfigService
   ) { }
 
+
   /**
-   * get要求を行う
-   * @param upath 要求APIパス
-   * @param hdic ヘッダーパラメータ{key:value...}
-   * @param paramdic 要求パラメータ{key:value...}
+   * 要求URIの作成
+   * @param upath 値
+   * @param paramdic パラメータ 
    * @returns 
    */
-  public getWeb<T>(upath: string, hdic:{[name:string]:string}, paramdic: {[name:string]:string}): Promise<T> {    
+  public createUri(upath: string, paramdic: {[name:string]:string}) {
     // APIパスの作成
     const url = this.config.ApiUri + upath;
 
@@ -84,6 +84,43 @@ export class WebConnectService {
     for(const pkey of Object.keys(paramdic)){
       htpa = htpa.append(pkey, paramdic[pkey]);
     }    
+    const ans = url+ '?' + htpa.toString()
+    return ans;
+
+  }
+
+  /**
+   * 
+   * @param upath fetchする
+   * @param hdic 
+   * @param paramdic 
+   * @returns 
+   */
+  public fetchWeb(upath: string, hdic:{[name:string]:string}, paramdic: {[name:string]:string}) {
+
+    
+    const uri = this.createUri(upath, paramdic);
+
+    // ヘッダーパラメータの作成
+    let header = new HttpHeaders();    
+    for(const hkey of Object.keys(hdic)){
+      header = header.append(hkey, hdic[hkey]);
+    }
+
+    const obs = this.http.get(uri, {withCredentials:true, headers:header, responseType:"blob"});    
+    return firstValueFrom(obs)
+  }
+
+  /**
+   * get要求を行う
+   * @param upath 要求APIパス
+   * @param hdic ヘッダーパラメータ{key:value...}
+   * @param paramdic 要求パラメータ{key:value...}
+   * @returns 
+   */
+  public getWeb<T>(upath: string, hdic:{[name:string]:string}, paramdic: {[name:string]:string}): Promise<T> {    
+    
+    const uri = this.createUri(upath, paramdic);
 
     // ヘッダーパラメータの作成
     let header = new HttpHeaders();    
@@ -91,7 +128,7 @@ export class WebConnectService {
       header = header.append(hkey, hdic[hkey]);
     }
     
-    const obs = this.http.get<T>(url+ '?' + htpa.toString(), {withCredentials:true, headers:header});    
+    const obs = this.http.get<T>(uri, {withCredentials:true, headers:header});    
     return firstValueFrom<T>(obs)
   }
 
@@ -104,8 +141,8 @@ export class WebConnectService {
    * @returns 
    */
   public postWeb<T>(upath: string, hdic:{[name:string]:string}, body: any): Promise<T> {    
-    // APIパスの作成
-    const url = this.config.ApiUri + upath;
+    
+    const uri = this.createUri(upath, {});
 
     // ヘッダーパラメータの作成
     let header = new HttpHeaders();
@@ -113,7 +150,7 @@ export class WebConnectService {
       header = header.append(hkey, hdic[hkey]);
     }
     
-    const obs = this.http.post<T>(url, body, {withCredentials:true, headers:header});
+    const obs = this.http.post<T>(uri, body, {withCredentials:true, headers:header});
     return firstValueFrom(obs);
   }
 
@@ -148,29 +185,47 @@ export class WebConnectService {
         const a = this.procPostProgressNext<T>(x);
         return a;
       })
-    );
-    
-    /*
-    const pob = new Observable<ProgressInfo<T>>(obs =>{
-      //捕まえて扱いやすい形式に変換する
-      req.subscribe({
-        next: (x)=>{               
-          const prog = this.procPostProgressNext<T>(x);
-          if(prog != null){
-            obs.next(prog);
-          }
-        },
-        error:(err)=>{  
-          obs.error(err);
-        },
-        complete:() => {
-          obs.complete();
-        }
-      });            
-    });
-    return pob;*/
+    );    
   }
 
+
+  /**
+   * 進捗報告付get要求
+   * @param upath 要求アドレス
+   * @param hdic ヘッダー
+   * @param paramdic パラメータ
+   * @returns 
+   */
+  public getWebWithProgress<T>(upath: string, hdic:{[name:string]:string}, paramdic: {[name:string]:string}): Observable<ProgressInfo<T>> {
+
+    // ヘッダーパラメータの作成
+    let header = new HttpHeaders();
+    for(const hkey of Object.keys(hdic)){
+      header = header.append(hkey, hdic[hkey]);
+    }
+
+    const uri = this.createUri(upath, paramdic);
+    const hreq = new HttpRequest("GET", uri, null, {
+      reportProgress: true,
+      headers:header,
+      responseType:"blob"
+    });
+
+    //リスエストを投げる
+    const req = this.http.request(hreq);
+
+    
+    //httpeventを扱いやすくする。
+    return req.pipe(
+      //filter(x => x.type == HttpEventType.Response || x.type == HttpEventType.UploadProgress),
+      map(x => {        
+        const a = this.procPostProgressNext<T>(x);
+        return a;
+      })
+    );    
+  }
+
+  //--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//
   /**
    * 進捗処理
    * @param ev イベント
@@ -184,9 +239,13 @@ export class WebConnectService {
       case HttpEventType.UploadProgress:
         ans = new ProgressInfo<T>(ev.loaded, ev.total ?? 0);
         break;
+
+        case HttpEventType.DownloadProgress:
+          ans = new ProgressInfo<T>(ev.loaded, ev.total ?? 0);
+          break;
       
       //responseが帰ってきた
-      case HttpEventType.Response:
+      case HttpEventType.Response:        
         ans = new ProgressInfo<T>(0, 0, ev.body);
         break;
 

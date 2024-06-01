@@ -24,9 +24,22 @@ export class ColTypeInputComponent {
 
   /**
    * 入力値
-   */
+   */  
   public inputText: string = "";
 
+  /**
+   * 初期値
+   */
+  @Input()
+  public set initialValue(va:any) {
+    if(!va){
+      return;
+    }
+    this.inputText = String(va);
+
+    //流し込まれたら編集として処理する
+    this.changeInput()
+  }
   //--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//
   /**
    * 入力が変更されたとｋ
@@ -59,8 +72,6 @@ export class ColTypeInputComponent {
         ans = this.inputText;
         break;
     }
-    
-
     this.value.emit(ans);
   }
 

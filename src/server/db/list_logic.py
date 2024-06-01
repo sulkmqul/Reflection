@@ -27,15 +27,28 @@ def get_list(mana:DbManager) -> ManageData:
 
 
 #------------------------------------------------------------------------------------
-def insert_record(mana:DbManager, data:rf_list.RfListDataEdit, userid:int) -> int:
+def insert_record(mana:DbManager, data:rf_list.RfListView, path_location:str, userid:int) -> int:
+    """
+    挿入
+    """
     
     colist = ms_list_info_columns.getrecords_visibled(mana)
 
-    rid = rf_list.insert_record(mana, data, userid)
+    rid = rf_list.insert_record(mana, data, path_location, userid)
     rf_list_info.insert_record(mana, rid, data.info, colist, userid)
 
     return rid
+#------------------------------------------------------------------------------------
+def update_record(mana:DbManager, data:rf_list.RfListView, userid:int):
+    """
+    更新
+    """
+    
+    colist = ms_list_info_columns.getrecords_visibled(mana)
 
+    rf_list.update_record(mana, data, userid)
+    rf_list_info.update_record(mana, data.rf_list_id, data.info, colist, userid)
+    pass
 
 #------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------

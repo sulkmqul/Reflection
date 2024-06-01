@@ -22,18 +22,31 @@ class RfListView:
     update_date:str = ""
     pass
 
-@dataclass
-class RfListDataEdit(RfListView):
-    #パス情報
-    path_location: str = ""
-    pass
+#------------------------------------------------------------------------------------
+def get_record_by_id(mana:DbManager, rf_list_id:int):
+    """
+    対象レコードの取得
+    mana:DB接続
+    rf_list_id:取得IDデータ
+    """
 
-
+    sql = """
+SELECT 
+rf_list.rf_list_id,
+rf_list.filename,
+rf_list.path_location,
+rf_list.related_rf_list_id
+FROM 
+rf_list 
+WHERE 
+rf_list.delete_flag = 0 AND 
+rf_list.rf_list_id = ?
+"""
+    data = mana.fetchone(sql, (rf_list_id,))
+    return {"rf_list_id":data[0], "filename":data[1], "path_location":data[2], "related_rf_list_id":data[3]}
 
 #------------------------------------------------------------------------------------
-
-#------------------------------------------------------------------------------------
-def insert_record(mana:DbManager, data:RfListDataEdit, userid:int) -> int:
+def insert_record(mana:DbManager, data:RfListView, path_location:str, userid:int) -> int:
     """
     挿入
     mana:DB管理
@@ -57,7 +70,7 @@ update_user_id
 """
 
 
-    uid = mana.insert(sql, (data.filename, data.path_location, data.related_rf_list_id,
+    uid = mana.insert(sql, (data.filename, path_location, data.related_rf_list_id,
                       0, userid, userid))
     return uid
 
@@ -65,7 +78,7 @@ update_user_id
 
 
 #------------------------------------------------------------------------------------
-def update_record(mana:DbManager, data:RfListDataEdit, userid:int):
+def update_record(mana:DbManager, data:RfListView, userid:int):
     """
     更新
     mana:DB管理
@@ -76,20 +89,19 @@ def update_record(mana:DbManager, data:RfListDataEdit, userid:int):
     sql = """
 UPDATE rf_list SET 
 filename = ?,
-path_location = ?,
 related_rf_list_id = ?,
 
 update_user_id = ?
 WHERE 
 rf_list_id = ?
 """
-    mana.update(sql, (data.filename, data.path_location, data.related_rf_list_id,
+    mana.execute(sql, (data.filename, data.related_rf_list_id,
                         userid, data.rf_list_id))
     pass
 
 
 #------------------------------------------------------------------------------------
-def delete_record(mana:DbManager, data:RfListDataEdit, userid:int):
+def delete_record(mana:DbManager, data:RfListView, userid:int):
     """
     削除
     mana:DB管理
@@ -104,7 +116,7 @@ update_user_id = ?
 WHERE 
 rf_list_id = ?
 """
-    mana.update(sql, (1, userid, data.rf_list_id))
+    mana.execute(sql, (1, userid, data.rf_list_id))
     pass
 
 #------------------------------------------------------------------------------------

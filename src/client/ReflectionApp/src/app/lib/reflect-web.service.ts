@@ -2,7 +2,7 @@ import { Injectable, numberAttribute } from '@angular/core';
 import {ProgressInfo, WebConnectService} from "../util/web-connect.service"
 import { MsUser, MsListInfoColumns, ReflectResponse, MsUserEdit, ManageListData, RfListView } from './reflect-type';
 import { Observable, firstValueFrom } from 'rxjs';
-import { HttpBackend, HttpEvent, HttpEventType } from '@angular/common/http';
+import { HttpBackend, HttpEvent, HttpEventType, HttpParams } from '@angular/common/http';
 
 
 
@@ -32,15 +32,85 @@ export class ReflectWebService {
    */
   public async get_list(): Promise<ManageListData> {
     return this.getWebAuth<ManageListData>("api/get_list", {}, {});
-    
   }
 
 
+  /**
+   * 管理ファイルへの挿入処理
+   * @param fdata 挿入データ
+   * @returns 挿入ID
+   */
   public insert_manage_data(fdata:FormData): Observable<ProgressInfo<number>> {
     return this.postWebProgressAuth<number>("api/insert_manage_data", {}, fdata);
     
   }
 
+  /**
+   * 管理リストの更新
+   * @param data 更新データ
+   * @returns 成功可否
+   */
+  public async update_manage_data(data:RfListView): Promise<boolean> {
+
+    const fdata:FormData = new FormData();    
+    fdata.append("data", JSON.stringify(data));
+
+    const ret = await this.postWebAuth<ReflectResponse>("api/update_manage_data", {}, fdata);
+    if(ret.code == 1){
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * 管理データの削除処理
+   * @param data 削除データ
+   * @returns 
+   */
+  public async delete_manage_data(data:RfListView): Promise<boolean> {
+
+    const fdata:FormData = new FormData();    
+    fdata.append("data", JSON.stringify(data));
+
+    const ret = await this.postWebAuth<ReflectResponse>("api/delete_manage_data", {}, fdata);
+    if(ret.code == 1){
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * 管理ファイルのダウンロード
+   * @param rid rf_list_id
+   * @returns 
+   */
+  public download_manage_file(rid:number) {
+
+    return this.webSvc.fetchWeb("api/download_manage_file", {}, {"rid":rid.toString()});
+  }
+
+  /**
+   * 進捗付きダウンロード
+   * @param rid 
+   * @returns 
+   */
+  public download_manage_file_progress(rid:number) {
+
+    return this.webSvc.getWebWithProgress<Blob>("api/download_manage_file", {}, {"rid":rid.toString()});
+  }
+
+  /**
+   * ファイルダウンロードのlinkを作成取得する
+   * @param rid 
+   * @returns 
+   */
+  public create_downloadlink(rid:number): string {
+    let token = sessionStorage.getItem(ReflectWebService.AUTH_SESSION_KEY);
+    if(!token){
+      token = "";      
+    }
+    return this.webSvc.createUri("api/download_manage_file_link", {"rid":rid.toString(), "token":token})
+  }
   //--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//
   //--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//
   //Auth
