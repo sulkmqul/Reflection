@@ -1,0 +1,51 @@
+/* You can add global styles to this file, and also import other style files */
+
+/*ロゴの基本形*/
+.logo{
+    font-family:'Times New Roman', Times, serif;
+    font-size: 6rem;
+    -webkit-text-stroke: 0.1rem #000;
+    color: #FAFAFA;        
+    text-align: center;
+    margin: 0;
+}
+
+/*通常ボタン*/
+.combutton {
+    display: inline-block;
+    min-width: 150px;
+    min-height: 60px;
+    color: white;
+    border: 2px solid #4D9BC1;
+    background: #4D9BC1;
+    padding: 5px 5px;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;    
+    transition: 0.3s;
+    border-radius: 5px;
+}
+/*通常ボタン マウスオーバー*/
+.combutton:hover {
+    color: #fff;
+    background: #8DCBF1;    
+}
+/*通常ボタン 押した*/
+.combutton:active{
+    background: #2D7BA1;
+}
+
+body{
+    font-size: 1.5rem;
+}
+input{
+    font-size: 100%;    
+}
+
+.error_message{
+    color: red;
+    font-weight: bold;
+    font-size: 120%;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -1,0 +1,46 @@
+<div class="coldialog">
+    <label class="dialog_title">{{title}}</label>
+    <table>
+        <tr>
+            <td>
+                UserName
+            </td>
+            <td>
+                <input type="text" placeholder="User name" [(ngModel)]="userName" >
+            </td>
+        </tr>        
+        <tr>
+            <td>
+                admin
+            </td>
+            <td>
+                <input type="checkbox" [(ngModel)]="adminFlag">
+            </td>
+        </tr>
+        <!--*********-->
+        <tr *ngIf="editFlag == false">
+            <td>
+                LoginID
+            </td>
+            <td>
+                <input type="text" placeholder="ID" [(ngModel)]="loginID">
+            </td>
+        </tr>
+        <tr *ngIf="editFlag == false">
+            <td>
+                LoginPassword
+            </td>
+            <td>
+                <input type="text" placeholder="password" [(ngModel)]="loginPassword">
+            </td>
+        </tr>
+        
+    </table>
+    <div class="okbutton">
+        <input type="button" value="OK" class="combutton" (click)="clickButtonOK()">
+    </div>
+
+    <div class="error_message">{{errorMessage}}</div>
+    <mat-progress-bar mode="indeterminate" *ngIf="progressVisibled"></mat-progress-bar>
+        
+</div>

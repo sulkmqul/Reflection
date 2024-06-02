@@ -1,0 +1,59 @@
+<div class="coldialog">
+    <label class="dialog_title">{{title}}</label>
+    <table>
+        <tr>
+            <td>
+                name
+            </td>
+            <td>
+                <input type="text" placeholder="" [(ngModel)]="disp_name" [readOnly]="editFlag">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                type
+            </td>
+            <td>
+                <select [(ngModel)]="col_type">
+                    <option *ngFor="let a of typeArray">{{a}}</option>
+                    <!--
+                    <option>INTEGER</option>
+                    <option>REAL</option>
+                    <option>TEXT</option>
+                    -->
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Default
+            </td>
+            <td>
+                <input type="text" placeholder="" [(ngModel)]="default_value" [readOnly]="editFlag">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                sort order
+            </td>
+            <td>
+                <input type="text" placeholder="" [(ngModel)]="sort_order" appIntegerInput>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                visibled
+            </td>
+            <td>
+                <input type="checkbox" [(ngModel)]="visible_flag">
+            </td>
+        </tr>
+    </table>
+    <div class="okbutton">
+        <input type="button" value="OK" class="combutton" (click)="clickOkButton()">
+    </div>
+
+    <div class="error_message">{{errorMessage}}</div>
+    <mat-progress-bar mode="indeterminate" *ngIf="progressVisibled"></mat-progress-bar>
+</div>
+
