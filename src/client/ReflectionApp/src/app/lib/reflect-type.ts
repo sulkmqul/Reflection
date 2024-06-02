@@ -1,3 +1,4 @@
+import { NumberSymbol } from "@angular/common";
 import { reflectComponentType } from "@angular/core";
 
 
@@ -70,6 +71,7 @@ export class RfListView {
 
     public rf_list_id:number = 0;
     public filename: string = "";
+    public file_size:number = 0;
     public related_rf_list_id: number = -1;
     public info:{[key:string]: any} = {};
 

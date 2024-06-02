@@ -45,7 +45,7 @@ export class FileListComponent implements OnInit  {
    * @returns 
    */
   private createDislayRowsList() {
-    const ans = ["id", "name", "update_user", "update_date"];
+    const ans = ["id", "name", "size", "update_user", "update_date"];
     this.colList.forEach(x => ans.push(x.display_name));    
     return ans;
   }
@@ -54,10 +54,15 @@ export class FileListComponent implements OnInit  {
    * テーブル一覧の読み込み
    */
   private async loadList() {
-    const data = await this.webSvc.get_list();    
-    this.colList = data.colist;
-    this.displayData = this.createDislayRowsList();
-    this.dataList = data.datalist;
+    try{
+      const data = await this.webSvc.get_list();    
+      this.colList = data.colist;
+      this.displayData = this.createDislayRowsList();
+      this.dataList = data.datalist;
+    }
+    catch(ex){
+      this.refSvc.setLastErrorMessage("load failed", ex);
+    }
   }
   //--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//
   /**

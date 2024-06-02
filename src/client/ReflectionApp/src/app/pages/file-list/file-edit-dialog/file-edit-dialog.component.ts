@@ -27,7 +27,7 @@ export class FileEditDialogComponent implements OnInit {
 
     if(rfdata != null){
 
-      this.titleString = "編集";
+      this.titleString = "Edit";
       
       //追記の初期値を入れておく
       const vals = Object.values(rfdata.info)
@@ -66,7 +66,7 @@ export class FileEditDialogComponent implements OnInit {
   /**
    * タイトル文字列
    */
-  public titleString = "新規作成"
+  public titleString = "Create"
 
   /**
    * ファイル名
@@ -101,7 +101,7 @@ export class FileEditDialogComponent implements OnInit {
   /**
    * カラム一覧
    */
-  public colList:MsListInfoColumns[] = [];
+  public colList:MsListInfoColumns[]|null = null;
 
   /**
    * カラム入力
@@ -114,8 +114,10 @@ export class FileEditDialogComponent implements OnInit {
    */
   public defInput:Array<any> = [];
 
+  /**
+   * ファイルダウンロードのリンク文字列
+   */
   public downloadLinkString = "";
-
 
 
   /**
@@ -138,10 +140,15 @@ export class FileEditDialogComponent implements OnInit {
       //新規ならファイルを取得
       const file:File = this.fileInputControl?.nativeElement.files[0];
       if(!file){      
-        throw Error("ファイルが選択されていません");
+        throw Error("File not selected");
       }
       
       ans.filename = file.name;
+    }
+
+    if(this.colList == null){
+      //colListがnullな場合、初期化されていないためエラー。
+      throw Error("initialize failed");
     }
 
     //追加入力値の取得
@@ -149,7 +156,7 @@ export class FileEditDialogComponent implements OnInit {
     for(let col of this.colList) {
       
       if(!this.colInput[i]){        
-        throw Error("入力に問題があります");
+        throw Error("invalid input");
       }
 
       ans.info[col.display_name] = this.colInput[i];
@@ -166,7 +173,7 @@ export class FileEditDialogComponent implements OnInit {
 
     const file:File = this.fileInputControl?.nativeElement.files[0];
     if(!file){      
-      throw Error("ファイルが選択されていません");
+      throw Error("File not selected");
     }
 
     //入力情報の取得
@@ -253,13 +260,14 @@ export class FileEditDialogComponent implements OnInit {
    */
   async ngOnInit() {
     try{
+
       //カラムの一覧取得
       this.colList = await this.webSvc.get_info_col_list();      
       this.colInput = new Array<any>(this.colList.length);
 
     }
     catch(ex) {
-      this.errorMessage = "初期化失敗";
+      this.errorMessage = "initialize failed";
     }
 
   }

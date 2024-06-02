@@ -1,10 +1,10 @@
 <div>
     <label class="logo smalllogo">{{config.ApplicationTitle}}</label>
     <div class="portal_info">
-        ようこそ {{loginUserName}}
+        Wellcome {{loginUserName}}
     </div>
     <div>
-        <input type="button" value="Portal" class="combutton" (click)="clickPortal()">
+        <!-- <input type="button" value="Portal" class="combutton" (click)="clickPortal()"> -->
         <input type="button" value="List" class="combutton" (click)="clickList()">
         <input type="button" value="Management" class="combutton" *ngIf="isManagement" (click)="clickManagement()">
     </div>

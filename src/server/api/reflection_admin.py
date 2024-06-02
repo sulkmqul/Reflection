@@ -122,20 +122,7 @@ def delete_user(userlist:list[ms_user.MsUser], uid=Depends(auth.require_admin_au
 #ms_list_info_col関係
 #-----------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
-@rt.get("/get_info_col_list")
-def get_info_col_list(uid=Depends(auth.require_admin_auth)):
-    """
-    管理テーブル情報の取得
-    """
-    try:
-        dlist = ms_list_info_columns.getrecords()        
 
-        return HTMLResponse(content=util.to_json(dlist));
-        pass
-    except Exception as ex:
-        log.error(ex)
-        raise HTTPException(500)
-    pass
 #-----------------------------------------------------------------------------------------
 @rt.post("/commit_info_col")
 def commit_info_col(infolist:list[ms_list_info_columns.MsListInfoColumns], uid=Depends(auth.require_admin_auth)):

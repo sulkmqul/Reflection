@@ -114,7 +114,7 @@ export class UserManagementComponent implements OnInit {
     }
     catch(ex){
       console.error("Error", ex);
-      this.refSvc.setLastErrorMessage("削除失敗", ex);
+      this.refSvc.setLastErrorMessage("delete failed", ex);
     }
     finally{
 

@@ -14,7 +14,7 @@
                 {{fileName}}                
             </td>
             <td>                      
-                <a class="combutton download_button" href="{{downloadLinkString}}" download>ダウンロード</a>
+                <a class="combutton download_button" href="{{downloadLinkString}}" download>Download</a>
                 
             </td>
         </tr>
@@ -31,7 +31,7 @@
     <div class="control_area">
         <input type="button" *ngIf="progressVisibled" class="combutton control_button control_button_cancel" value="Cancel" (click)="clickButtonCancelUpload()">
         <input type="button" *ngIf="!progressVisibled" class="combutton control_button" value="OK" (click)="clickButtonOK()">
-        <input type="button" *ngIf="editFlag" class="combutton control_button" value="削除" (click)="clickButtonDelete()">
+        <input type="button" *ngIf="editFlag" class="combutton control_button" value="Delete" (click)="clickButtonDelete()">
     </div>
     <div class="error_message">{{errorMessage}}</div>
     <mat-progress-bar *ngIf="progressVisibled" mode="determinate" [value]="progress_now" [bufferValue]="progress_max"></mat-progress-bar>

@@ -12,6 +12,8 @@ class RfListView:
     rf_list_id: int = 0
     #ファイル名
     filename: str = ""
+    #ファイルサイズ
+    file_size: int = 0
     #関連ID
     related_rf_list_id:int = None
 
@@ -34,6 +36,7 @@ def get_record_by_id(mana:DbManager, rf_list_id:int):
 SELECT 
 rf_list.rf_list_id,
 rf_list.filename,
+rf_list.file_size,
 rf_list.path_location,
 rf_list.related_rf_list_id
 FROM 
@@ -43,7 +46,7 @@ rf_list.delete_flag = 0 AND
 rf_list.rf_list_id = ?
 """
     data = mana.fetchone(sql, (rf_list_id,))
-    return {"rf_list_id":data[0], "filename":data[1], "path_location":data[2], "related_rf_list_id":data[3]}
+    return {"rf_list_id":data[0], "filename":data[1], "file_size":data[2],  "path_location":data[3], "related_rf_list_id":data[4]}
 
 #------------------------------------------------------------------------------------
 def insert_record(mana:DbManager, data:RfListView, path_location:str, userid:int) -> int:
@@ -57,6 +60,7 @@ def insert_record(mana:DbManager, data:RfListView, path_location:str, userid:int
     sql = """
 INSERT INTO rf_list (
 filename,
+file_size,
 path_location,
 related_rf_list_id,
 
@@ -64,13 +68,13 @@ delete_flag,
 create_user_id,
 update_user_id
 ) VALUES (
-?, ?, ?,
+?, ?, ?, ?,
 ?, ?, ?
 );
 """
 
 
-    uid = mana.insert(sql, (data.filename, path_location, data.related_rf_list_id,
+    uid = mana.insert(sql, (data.filename, data.file_size, path_location, data.related_rf_list_id,
                       0, userid, userid))
     return uid
 
@@ -130,6 +134,7 @@ def create_template(cur:sqlite3.Cursor):
 CREATE TABLE IF NOT EXISTS rf_list ( 
 rf_list_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 filename TEXT NOT NULL,
+file_size INTEGER NOT NULL DEFAULT 0,
 path_location TEXT NOT NULL,
 related_rf_list_id INTEGER DEFAULT NULL,
 

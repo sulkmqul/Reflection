@@ -22,14 +22,14 @@ export class EditColumnsInfoDialogComponent {
     @Inject(MAT_DIALOG_DATA) public info: MsListInfoColumns|null,
     private webSvc:ReflectWebService
   ) {
-    console.log("Dialog DATA", info);
+    //console.log("Dialog DATA", info);
 
-    this.title = "新規登録";
+    this.title = "Create";
 
     //編集時の処理
     if(info != null){
       
-      this.title = "編集";
+      this.title = "Edit";
 
       //編集時は型の変更を許可しない
       this.typeArray = [info.column_type];      
@@ -129,7 +129,7 @@ export class EditColumnsInfoDialogComponent {
       console.log("input:", data)
       const f = await this.webSvc.commit_info_col([data]);
       if(f == false){
-        this.errorMessage = "失敗しました";
+        this.errorMessage = "failed";
         return;
       }      
     }

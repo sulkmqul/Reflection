@@ -46,7 +46,7 @@ def require_admin_auth(req:Request) -> int:
         if user.admin_flag == 0:
             raise Exception("not admin user")
 
-    except:
+    except Exception as ex:        
         raise HTTPException(401, "Unauthorizaed")
     
     return n

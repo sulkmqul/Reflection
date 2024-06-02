@@ -6,9 +6,9 @@ import {FileListComponent} from "./pages/file-list/file-list.component";
 
 export const routes: Routes = [
     { path:"login", component:LoginComponent},
-    { path:"portal", component:PortalComponent},
+    //{ path:"portal", component:PortalComponent},
     { path:"flist", component:FileListComponent},
     { path:"manage", component:ManagementComponent},
 
-    { path:"**", redirectTo:"portal"},
+    { path:"**", redirectTo:"login"},
 ];

@@ -201,7 +201,7 @@ export class ReflectWebService {
    * 情報カラムの取得
    */
   public async get_info_col_list() : Promise<MsListInfoColumns[]> {    
-    return this.getWebAuth<MsListInfoColumns[]>("admin/get_info_col_list", {}, {});
+    return this.getWebAuth<MsListInfoColumns[]>("api/get_info_col_list", {}, {});
   }
 
   /**

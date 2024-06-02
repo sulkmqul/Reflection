@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException, Request, File, Form, UploadFile, Depends
 from fastapi.responses import HTMLResponse, FileResponse
 from modules import mlog, util, auth
-import refconfig;
-from db import rf_list, rf_list_info, list_logic
+import refconfig
+from db import ms_list_info_columns, rf_list, rf_list_info, list_logic
 from db.dbmana import DbManager
 import json
 from modules import list_proc
@@ -48,6 +48,8 @@ async def insert_manage_data(file: list[UploadFile], data:str = Form(), uid=Depe
         
         #ファイル情報取得
         fdata = await file[0].read()
+        #ファイルサイズ設定
+        refview.file_size = len(fdata)
 
         #基準時刻の取得
         ntime = datetime.datetime.now()
@@ -91,8 +93,6 @@ def update_manage_data(data:str = Form(), uid=Depends(auth.require_login_auth)):
         refview = rf_list.RfListView(rf_list_id=jdata["rf_list_id"], filename=jdata["filename"], related_rf_list_id=jdata["related_rf_list_id"])
         refview.info = jdata["info"]
 
-        print("update_madage_data", refview)
-
         with DbManager() as mana:
             try:
                 mana.begin_transaction()
@@ -117,8 +117,6 @@ def delete_manage_data(data:str = Form(), uid=Depends(auth.require_login_auth)):
         refview = rf_list.RfListView(rf_list_id=jdata["rf_list_id"], filename=jdata["filename"], related_rf_list_id=jdata["related_rf_list_id"])
         refview.info = jdata["info"]
         
-        print("delete_manage_data", refview)
-
         with DbManager() as mana:
             try:
                 mana.begin_transaction()                
@@ -176,26 +174,17 @@ def download_manage_file_link(rid:int, token:str):
         raise HTTPException(500)
     pass
 #-----------------------------------------------------------------------------------------
-#-----------------------------------------------------------------------------------------
-#-----------------------------------------------------------------------------------------
-@rt.post("/refupload")
-async def refupload(file: list[UploadFile], data:str = Form()):
+@rt.get("/get_info_col_list")
+def get_info_col_list(uid=Depends(auth.require_login_auth)):
+    """
+    管理テーブル情報の取得
+    """
+    try:
+        dlist = ms_list_info_columns.getrecords()        
 
-    fpath = refconfig.settings.create_save_filepath(file.filename)
-
-    # 
-    for file_data in file:
-        fdata = await file_data.read()
-        
-        # パスの作成        
-        fpath = refconfig.settings.create_save_filepath(file_data.filename)
-        with open(fpath, "wb") as fp:
-            fp.write(fdata)
-            pass
-        print("savefiles ", fpath)
-    
-    return HTMLResponse(content=util.to_json(1))
-
-
-
-    
+        return HTMLResponse(content=util.to_json(dlist));
+        pass
+    except Exception as ex:
+        log.error(ex)
+        raise HTTPException(500)
+    pass

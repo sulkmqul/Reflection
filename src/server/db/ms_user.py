@@ -29,14 +29,14 @@ ms_user.ms_user_id,
 ms_user.user_name,
 ms_user.admin_flag
 FROM 
-ms_user
+ms_user 
 WHERE
-ms_user.ms_user_id = ?
+ms_user.ms_user_id = ? AND
 ms_user.delete_flag = 0
 """
 
     with DbManager() as mana:        
-        user = mana.fetchone(sql, (ms_user_id))
+        user = mana.fetchone(sql, (ms_user_id, ))
         pass
     
     if user is None:

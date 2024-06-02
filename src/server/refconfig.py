@@ -16,7 +16,7 @@ class Settings:
     ####################################################################################
     # 認証
     # Trueで認証を回避する
-    AUTH_DEBUG = True
+    AUTH_DEBUG = False
     # 認証tokenの有効時間
     AUTH_VALID_HOUR = 1
     # jwtの使用アルゴリズム

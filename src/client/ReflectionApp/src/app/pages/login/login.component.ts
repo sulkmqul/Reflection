@@ -32,11 +32,13 @@ export class LoginComponent {
   /**
    * 入力ログインID
    */
-  public inputLoginID: string = "admin";
+  //public inputLoginID: string = "admin";
+  public inputLoginID: string = "";
   /**
    * 入力パスワード
    */
-  public inputLoginPassword: string = "#reflection";
+  //public inputLoginPassword: string = "#reflection";
+  public inputLoginPassword: string = "";
 
   /**
    * エラー文字列
@@ -74,13 +76,13 @@ export class LoginComponent {
       }
 
       //画面遷移
-      this.router.navigate(["portal"]);
+      this.router.navigate(["flist"]);
 
     }
     catch(ex)
     {
       console.error(ex);
-      this.errorMessage = "失敗";
+      this.errorMessage = "login failed";
     }
     finally
     {
