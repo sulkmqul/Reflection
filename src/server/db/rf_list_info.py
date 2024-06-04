@@ -22,7 +22,7 @@ def insert_record(mana:DbManager, rf_list_id:int, data:dict, colist:list[MsListI
 
     sql = _create_insert_sql(colist=colist)    
     val = [data.get(co.display_name) for co in colist]
-    print(sql, (rf_list_id, *val))
+    #print(sql, (rf_list_id, *val))
     id = mana.insert(sql, (rf_list_id, *val))    
     return id
 #------------------------------------------------------------------------------------
@@ -34,6 +34,10 @@ def update_record(mana:DbManager, rf_list_id:int, data:dict, colist:list[MsListI
     data:更新物
     userid:更新者
     """
+
+    # 追加カラムが無いなら処理しない
+    if colist.__len__() <= 0:
+        return
 
     sql = _create_update_sql(colist=colist)
 
@@ -116,6 +120,16 @@ def _create_insert_sql(colist:list[MsListInfoColumnsEdit]) -> str:
     """
     挿入SQLの作成
     """
+
+    if colist.__len__() <= 0:
+        return f"""
+INSERT INTO rf_list_info (
+rf_list_id
+) VALUES (
+?
+);
+"""        
+        pass
 
     cnamelist = [x.column_name for x in colist]
     inlist = ["?" for x in colist]    

@@ -1,0 +1,14 @@
+services:
+  reflection:
+    build: ./
+    image: reflection_app:latest
+    container_name: reflection
+    command: bash -c "service nginx start && uvicorn main:app --workers 4 --host 0.0.0.0 --port 8000 --log-config log_config.yaml"
+    volumes:
+      - ./working/data/:/usr/local/reflection/data
+      - ./working/log/:/var/log/nginx
+    ports:
+      - 8880:80
+      - 41738:41738
+    #stdin_open: true
+    #tty: true

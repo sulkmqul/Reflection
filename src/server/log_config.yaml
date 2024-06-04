@@ -17,7 +17,7 @@ handlers:
   rotate_file:
     class: logging.handlers.TimedRotatingFileHandler
     formatter: default
-    filename: reflection.log
+    filename: /var/log/nginx/reflection.log
     when: midnight
     backupCount: 365
     encoding: utf-8

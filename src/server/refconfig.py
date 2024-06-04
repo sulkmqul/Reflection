@@ -5,13 +5,14 @@ class Settings:
     """
 
     # CORS許可場所
-    CORS_ORIGINS= "http://localhost:4200"
+    #CORS_ORIGINS= "http://localhost:4200"
+    CORS_ORIGINS= "http://localhost:8880"
 
-    # DBファイルの場所(フルパスで書くこと)
-    DB_SRC = "F:/作業領域/P/Reflection/working/refl.db"
+    # DBファイルの場所(フルパスで書くこと)    
+    DB_SRC = "/usr/local/reflection/data/reflection.db"
 
     # ファイル保存パス(フルパスで書くこと)
-    SAVE_ROOT_PATH = "F:/作業領域/P/Reflection/working/"
+    SAVE_ROOT_PATH = "/usr/local/reflection/data/"
 
     ####################################################################################
     # 認証
