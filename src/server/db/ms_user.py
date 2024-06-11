@@ -247,7 +247,7 @@ BEGIN
 END;
 """
     sql_insert = """
-INSERT INTO ms_user (user_name, login_id, login_password, create_user_id, update_user_id, admin_flag) VALUES ('administrator', 'admin', '#reflection', 0, 0, 1);
+INSERT OR IGNORE INTO ms_user (user_name, login_id, login_password, create_user_id, update_user_id, admin_flag) VALUES ('administrator', 'admin', '#reflection', 0, 0, 1);
 """
 
     # 実行
