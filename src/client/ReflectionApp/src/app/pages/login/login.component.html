@@ -1,0 +1,18 @@
+<div  class="loginback">
+    <p class="logo">{{config.ApplicationTitle}}</p>    
+    <mat-card>        
+        <mat-card-content>
+            <div>
+                <input type="text" placeholder="LoginID" [(ngModel)]="inputLoginID">
+            </div>
+            <div>
+                <input type="password" placeholder="password" [(ngModel)]="inputLoginPassword">
+            </div>
+            <div class="error_message">{{errorMessage}}</div>
+            <input class="combutton testbutton" type="button" value="Login" (click)="onClickLoginButton()">
+        </mat-card-content>        
+        <mat-card-footer>            
+            <mat-progress-bar *ngIf="progressVisibled" mode="indeterminate"></mat-progress-bar>
+          </mat-card-footer>
+    </mat-card>
+</div>
