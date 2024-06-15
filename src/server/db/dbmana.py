@@ -12,11 +12,15 @@ log = mlog.get_log()
 def check_db_initialize() -> bool:
     """
     DBの初期化を確認する
-
-    DBファイルの存在をもって初期化済みとみなす
-    本来なら中身の主要テーブルの可否までチェックするのが望ましいが・・・
+    ひとまずDBファイルの存在と環境変数によって初期化とみなす
+    return:True=初期化済み
     """
-    return os.path.exists(refconfig.settings.DB_SRC)
+
+    exiret = os.path.exists(refconfig.settings.DB_SRC)
+    if exiret is True:
+        return True
+    
+    return False
     
 
 #-----------------------------------------------------------------------------------------
