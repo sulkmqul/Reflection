@@ -1,5 +1,5 @@
 # Reflection
-Reflectionはブラウザ上で動作するシンプルなデータファイル管理システムです。  
+Reflectionはブラウザ上で動作するシンプルなファイル管理システムです。  
 ファイルの実体およびファイルの追加情報を保持、管理を行うことができます。  
 追加カラムを登録することで任意の情報を管理できます。
 
@@ -14,7 +14,7 @@ dockerファイルおよびcomposeを用意しました。
 以下の手順で使用可能です。
 
 
-### Git Clone and docker build
+### DcokerBuild
 以下のコマンドを実行してソースをcloneし、docker imageを作成してコンテナを起動してください。
 ```
 $ git clone https://github.com/sulkmqul/Reflection
@@ -36,7 +36,7 @@ admin|#reflection
 
 ログインしたら一覧が表示されます。
 
-### Create Iser
+### ユーザー追加
 <img src="doc/helpimg/ulist.png" height=300>
 
 以下の手順でユーザーを作成します。　　
@@ -46,7 +46,7 @@ admin|#reflection
 <img src="doc/helpimg/ulist_create.png" height=300>
 * OKボタンを押して登録します。
 
-### Create Additional Columns  
+### カラム追加
 <img src="doc/helpimg/collist.png" height=300>  
 
 以下の手順で追加のカラムを登録します。  
@@ -61,7 +61,7 @@ admin|#reflection
 * OKボタンを押して登録します。
 
 
-### Upload File  
+### ファイルアップロード
 
 <img src="doc/helpimg/flist.png" height=300>  
 
@@ -73,7 +73,7 @@ admin|#reflection
   * Additional Columnsは必須入力です。
 
 
-### Edit and download File
+### 編集とファイルダウンロード
 以下の手順でアップロードしたファイルをダウンロードできます。
 * Listを選択します。
 * 一覧から対象をダブルクリックします。
@@ -95,6 +95,9 @@ worker数はdocker-compose.yamlを開いて調整してください。
 1～4ぐらいが良いと思います。
 それ以上の大規模なシステムの場合は別のものを使った方が良いかもしれません。
 
+
+
+
 ## Build
 ### server
 * Python 3.8
@@ -105,6 +108,15 @@ worker数はdocker-compose.yamlを開いて調整してください。
 * node 20.11
   * Angular 17.2
   * Angular Material 17
+
+## Author 
+sulkmqul  
+[Blog](http://blog.livedoor.jp/serialpath/)
+
+
+## LICENSE
+[WTFPL](http://www.wtfpl.net/)  
+
 
 
 ## Usage in english
@@ -147,4 +159,9 @@ Double click list items, you can download file, and edit or delete.
 <img src="doc/helpimg/flist.png" height=300>  
 
 
-
+### Settings
+If you are not using a Dockerfile, please change these files.
+* Server  
+src/server/refconfig.py
+* Client  
+src/client/ReflectionApp/src/assets/config.js
