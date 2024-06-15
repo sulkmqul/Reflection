@@ -112,7 +112,6 @@ worker数はdocker-compose.yamlを開いて調整してください。
 
 ## Author 
 sulkmqul  
-[Blog](http://blog.livedoor.jp/serialpath/)
 
 
 ## LICENSE
