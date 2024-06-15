@@ -10,7 +10,7 @@ English usage is last of document.
 
 
 ## Usage
-dockerファイルおよびcomposeを用意しました。  
+そのまま実行できるようにdockerファイルおよびcomposeを用意しました。  
 以下の手順で使用可能です。
 
 
@@ -103,6 +103,7 @@ worker数はdocker-compose.yamlを開いて調整してください。
 * Python 3.8
   * FastAPI 0.11
   * sqlite3
+* Uvicorn 
 
 ### client
 * node 20.11
@@ -165,3 +166,7 @@ If you are not using a Dockerfile, please change these files.
 src/server/refconfig.py
 * Client  
 src/client/ReflectionApp/src/assets/config.js
+
+if you change Uvicorn workers, change docker compose file.
+Recommend workes num 1 to 4. 
+
