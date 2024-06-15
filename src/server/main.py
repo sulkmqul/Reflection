@@ -56,41 +56,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/test")
-def test():
-    log.info("TEST LOG")
-    return "TEST"
-
-
-def _TEST_TEST():
-    from db import rf_list, rf_list_info, ms_list_info_columns, list_logic, list_info_columns_logic
-    with db.dbmana.DbManager() as mana:
-        #sql = list_logic._create_select_sql(ms_list_info_columns.getrecords_visibled(mana))
-        data = rf_list.RfListDataEdit(
-            delete_flag=0,
-            filename="test_insert.txt",
-            path_location="/test/fds",
-        )
-        data.info = {
-            "TEST int":853,
-            "test real":12.54,
-            "test てきすと":"i am folling",
-        }
-        mana.begin_transaction()
-        try:
-            rid = list_logic.insert_record(mana, data, 1)
-            print("INSERT OK", rid)
-            mana.commit()
-            #list = list_logic.get_list(mana)            
-            
-            
-        except Exception as ex:
-            mana.rollback()
-            print("EXCEPTION", ex)
-            pass
-        pass
-    pass
-
 
 
 if __name__ == "__main__":  
