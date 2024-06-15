@@ -4,9 +4,9 @@ Reflectionはブラウザ上で動作するシンプルなデータファイル�
 追加カラムを登録することで任意の情報を管理できます。
 
 Reflection is a simple file management application.
-It works with a web browser.
-You can upload data files and add additional infomation to it files.  
-English usage is last of document
+It works with a web browser.  
+You can upload any files and add custom infomation to it files.  
+English usage is last of document.
 
 
 ## Usage
@@ -119,27 +119,32 @@ $ docker compose up
 Open your web browser, and move to following URL.  
 [http://localhost:8880/reflection](http://localhost:8880/reflection)
 
-Administrator default account is below.  
+Default account is below.  
 Input this ID when first time accesses.
 Login ID | password
 ---|---
 admin|#reflection 
 
+<img src="doc/helpimg/login.png" height=300>
 
-
+### User Add
 Push Management button and select Users tab.  
 Push Create button, you can make new user.  
 <img src="doc/helpimg/ulist.png" height=300>
 
 
-
+### Columns Add
 Push Management button and select columns tab.  
 Push Create button, you can make new columns for file list.
 <img src="doc/helpimg/collist.png" height=300>
 
 
+
+### File manage
 Push List button, and Add Button, you can upload new file in system.  
-Double click list items, you can download file, and edit or delete   infomations.
+Double click list items, you can download file, and edit or delete.
+
+<img src="doc/helpimg/flist.png" height=300>  
 
 
 
